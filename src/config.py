@@ -1,16 +1,13 @@
 from utils.db_config import dbconfig
-# import rich
+import rich.console
 from rich import print as printc
 import random
-import hashlib
 import sys
 import getpass
 import string
+from utils.hasher import hasher_256
 
-def debug():
-    print("here")
-debug()
-# console = rich.console.Console()
+rconsole = rich.console.Console()
 
 def generate_device_secret(length):
     ds = random.choices(string.ascii_uppercase + string.digits, k = length)
@@ -24,8 +21,7 @@ def config():
         cursor.execute("CREATE DATABAsE pm")
     except Exception as e:
         printc("[red][!] could not create a databse")
-        # console.print_exception(e)
-        print(e)
+        rconsole.print_exception()
         sys.exit(0)
     printc("[green][+] Database created [/green]")
     #creating tables
@@ -43,11 +39,9 @@ def config():
         if mp == getpass.getpass("Retype your Master Password : ") and mp != '':
             break
         printc("[red][!]Try again[/red]")
-
-    mp = hashlib.sha256(mp.encode()).hexdigest()
+    mp = hasher_256(mp)
     ds = generate_device_secret(10)
     str_ds = ''
-    
     for ele in ds:
         str_ds += ele
 
