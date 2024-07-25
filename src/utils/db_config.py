@@ -1,7 +1,7 @@
 import mysql.connector # type: ignore
 import rich
 
-console = rich.Console
+
 
 def dbconfig():
     try:
@@ -11,6 +11,6 @@ def dbconfig():
             passwd='password'
         )
     except Exception as e:
-        console.print_exception(e)
-                
+        print(e)
+
     return db
